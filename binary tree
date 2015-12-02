@@ -116,3 +116,19 @@ void inOrderTra(CBTType*T){
         inOrderTra(T->right);
     }
 }
+void ClearTree(CBTType *treeNode)
+{
+    if(treeNode)
+    {
+        ClearTree(treeNode->left);
+        ClearTree(treeNode->right);
+        delete treeNode;
+    }
+}
+void preOrderTre(CBTType *T){
+    if (T!=NULL) {
+        printf("%c",T->data);
+        preOrderTre(T->left);
+        preOrderTre(T->right);
+    }
+}
