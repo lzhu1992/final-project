@@ -99,6 +99,7 @@ public:
     //*******Variable*Variable****//
     Multiply(Var left, Var right)
     {
+        
         Node *temp = new Node('*');
         temp->leftchild = new Node(left.getValue());
         temp->rightchild = new Node(right.getValue());
@@ -109,6 +110,7 @@ public:
     //*******Operator*Operator****//
     Multiply(Operator left, Operator right)
     {
+        
         Node *temp = new Node('*');
         temp->leftchild = left.root;
         temp->rightchild = right.root;
