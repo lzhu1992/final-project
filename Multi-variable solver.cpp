@@ -40,8 +40,7 @@ int main(){
 		}
 		cout<<endl;
 	}
-
-
+	
 	for(j = 0; j < n; j++){
 		double max = 0;
 		double imax = 0;
@@ -52,7 +51,7 @@ int main(){
 				m = i;
 			}
 		}
-
+		
 		if(fabs(a[j][j]) != max) {
 			double b = 0;
 			for(int k = j;k < n + 1; k++){
@@ -61,9 +60,8 @@ int main(){
 				a[m][k] = b;
 			}
 		}
-
 		//print(a, 3, 4);
-
+		
 		for(int r = j;r < n + 1;r++){
 			a[j][r] = a[j][r] / max;//divide first element of the column, in order to get 1 for the first element
 		}
