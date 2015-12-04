@@ -7,7 +7,6 @@ using namespace std;
 
 class Integration
 {
-
  private:
     double A; //area under the curve
     double xmin, xmax; //limits of integration
@@ -65,22 +64,18 @@ double Integration::Simpson()
  {
     return exp(-x)*sin(x)*sin(x);
  }
-
  double FUNB(double x)
  {
     return 1.0/((1+x*x)*(1+x*x/2.0));
  }
-
  double FUNC(double x)
  {
     return x*exp(-x);
  }
-
  double FUND(double x)
  {
     return exp(-x*x/2.0);
  }
-
 
 int main()
 {
