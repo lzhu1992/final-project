@@ -8,7 +8,6 @@ using namespace std;
 
 /*
  Solver for first order Ordinary Differential Equations
-
  x'(t) = f1(x,t)   equation
  x(ti) = xi        initial condition
 
