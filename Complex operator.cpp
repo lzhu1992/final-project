@@ -2,7 +2,7 @@
 #include <iostream>
 using namespace std;
 
-/*I did some Complex number operators according what we have learned.
+/*I did some Complex number operators according to what we have learned.
 This can be used exclusively or be a part of our project as a header file.
 */
 
