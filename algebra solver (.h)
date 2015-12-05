@@ -1,3 +1,6 @@
+//  Created by LIN ZHU on 11/26/2015.
+//  Copyright © 2015 Lin Zhu. All rights reserved.
+
 #pragma once
 #include <iostream>
 #include <sstream>
@@ -6,8 +9,6 @@
 #include <stack>
 #include <cmath>
 using namespace std;
-//  Created by LIN ZHU on 11/26/2015.
-//  Copyright © 2015 Lin Zhu. All rights reserved.
 string ans_order = "";
 //************Convert String to Double**********//
 double String2Double(string s)
