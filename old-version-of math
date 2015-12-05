@@ -1,0 +1,663 @@
+old version of + * /
+//
+//  main.cpp
+//  multiply
+//
+//  Created by Weiqi Wang on 15/12/1.
+//  Copyright (c) 2015年 Sandman.Seven. All rights reserved.
+#include <sstream>
+#include <string>
+#include <iostream>
+#include <math.h>
+#include <cmath>
+#include<iomanip>
+using namespace std;
+
+//*************Variable Coeffiencal*******//
+class Var{
+private:
+    string val;
+public:
+    Var(string s):val(s){}
+    void set(string s, double num)
+    {
+        ostringstream s1;
+        s1 << num;
+        val = s1.str() + s;
+    }
+    string getValue()
+    {
+        return val;
+    }
+};
+
+//************Constant Number*************//
+class Const{
+private:
+    double num;
+public:
+    Const(double num) :num(num){}
+    double getValue()
+    {
+        return num;
+    }
+};
+
+//***********Parent class*****************//
+//****************************************//
+//****Common Function and Variable********//
+//******for the children class************//
+//****************************************//
+
+class Operator{
+public:
+    class Node
+    {
+    public:
+        Node *leftchild;
+        Node *rightchild;
+        char oper;
+        double value;
+        string s;
+        Node(char c) : oper(c), rightchild(nullptr), leftchild(nullptr){}
+        Node(string var) : s(var), rightchild(nullptr), leftchild(nullptr){}
+        Node(double n) : value(n), rightchild(nullptr), leftchild(nullptr){}
+    };
+    string Oper;
+    string val;
+    Node *root;
+    
+    
+    //****************************************************************//
+    //***********Determine whether the String's content***************//
+    //******************is Number or not******************************//
+    //****************************************************************//
+    
+    bool isNumber(string s)
+    {
+        for (int i = 0; i < s.size(); i++)
+        {
+            if (s[i] != '.' && (s[i]<'0' || s[i]>'9'))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+    
+    //********************Compute the Operator Value*************//
+    //***********************************************************//
+    //****Include +,-,*,/ , all of these are Binary operation****//
+    //***********************************************************//
+    string BinCompute(string left, string right, char oper)
+    {
+        int flag_status = 0;
+        istringstream s_l(left);
+        istringstream s_r(right);
+        double num_left=0, num_right=0;
+        if (isNumber(left)&&isNumber(right))
+        {
+            s_l >> num_left;
+            s_r >> num_right;
+            flag_status = 1;
+        }
+        else
+        {
+            flag_status = 2;
+        }
+        double ans;
+        ostringstream stream;
+        string s;
+        switch (oper)
+        {
+            case '+':
+                switch (flag_status)
+            {
+                case 1:
+                    ans = num_left + num_right;
+                    stream << ans;
+                    s = stream.str();
+                    break;
+                case 2:
+                    s = left + "+" + right;
+                    break;
+            }
+                break;
+            case '-':
+                switch (flag_status)
+            {
+                case 1:
+                    ans = num_left - num_right;
+                    stream << ans;
+                    s = stream.str();
+                    break;
+                case 2:
+                    s = left + "-" + right;
+                    break;
+            }
+                break;
+            case '*':
+                switch (flag_status)
+            {
+                case 1:
+                    ans = num_left * num_right;
+                    stream << ans;
+                    s = stream.str();
+                    break;
+                case 2:
+                    s = left + "*" + right;
+                    break;
+            }
+                break;
+            case '/':
+                switch (flag_status)
+            {
+                case 1:
+                    ans = num_left / num_right;
+                    stream << ans;
+                    s = stream.str();
+                    break;
+                case 2:
+                    s = left + "/" + right;
+                    break;
+            }
+                break;
+        }
+        return s;
+    }
+    
+    friend ostream& operator << (ostream &s, Operator oper)
+    {
+        s << oper.val;
+        return s;
+    }
+};
+
+//**********Add **************//
+//******Const+Const***********//
+//*****Const+ Operator *******//
+//*****Operator+ Const*********//
+//*****Variable+Const*********//
+//*****Const+Variable*********//
+//*******Variable+Operator****//
+//*******Operator+Variable****//
+//*******Variable+Variable****//
+//*******Operator+Operator****//
+
+class Add :public Operator{
+public:
+    //***********number + number**********//
+    /*Add(double left, double right)
+     {
+     ostringstream s;
+     root = new Node("+");
+     root->leftchild = new Node(left);
+     root->rightchild = new Node(right);
+     int num = left + right;
+     s << num;
+     val = s.str();
+     }*/
+    
+    //***********Constant + Constant**********//
+    Add(Const left, Const right)
+    {
+        ostringstream s1,s2;
+        string sl, sr;
+        root = new Node('+');
+        root->leftchild = new Node(left.getValue());
+        root->rightchild = new Node(right.getValue());
+        //int num = left.getValue() + right.getValue();
+        s1 << left.getValue();
+        sl = s1.str();
+        s2 << right.getValue();
+        sr = s2.str();
+        val = BinCompute(sl, sr,'+');
+    }
+    
+    //*************Constant + Operator***********//
+    Add(Const left, Operator right)
+    {
+        Node *temp = new Node('+');
+        temp->leftchild = new Node(left.getValue());
+        temp->rightchild = right.root;
+        ostringstream s1;
+        string sl;
+        s1 << left.getValue();
+        sl = s1.str();
+        val = BinCompute(sl, right.val, '+');
+        root = temp;
+    }
+    
+    //******************Operator + Constant***********//
+    Add(Operator left, Const right)
+    {
+        Node *temp = new Node('+');
+        temp->leftchild = left.root;
+        temp->rightchild = new Node(right.getValue());
+        ostringstream s1;
+        string sr;
+        s1 << right.getValue();
+        sr = s1.str();
+        val = BinCompute(left.val, sr, '+');
+        root = temp;
+    }
+    
+    //******************Variable+Const*************//
+    Add(Var left, Const right)
+    {
+        root = new Node('+');
+        root->leftchild = new Node(left.getValue());
+        root->rightchild = new Node(right.getValue());
+        ostringstream s1;
+        string sr;
+        s1 << right.getValue();
+        sr = s1.str();
+        val = BinCompute(left.getValue(), sr, '+');
+    }
+    
+    //*****Const+Variable*********//
+    Add(Const left, Var right)
+    {
+        root = new Node('+');
+        root->leftchild = new Node(left.getValue());
+        root->rightchild = new Node(right.getValue());
+        ostringstream s1;
+        string sl;
+        s1 << left.getValue();
+        sl = s1.str();
+        val = BinCompute(sl, right.getValue(), '+');
+    }
+    
+    //*******Variable+Operator****//
+    Add(Var left, Operator right)
+    {
+        Node *temp = new Node('+');
+        temp->leftchild = new Node(left.getValue());
+        temp->rightchild = right.root;
+        val = BinCompute(left.getValue(), right.val, '+');
+        root = temp;
+    }
+    
+    //*******Operator+Variable****//
+    Add(Operator left, Var right)
+    {
+        Node *temp = new Node('+');
+        temp->leftchild = left.root;
+        temp->rightchild = new Node(right.getValue());
+        val = BinCompute(left.val, right.getValue(), '+');
+        root = temp;
+    }
+    
+    //*******Variable+Variable****//
+    Add(Var left, Var right)
+    {
+        Node *temp = new Node('+');
+        temp->leftchild = new Node(left.getValue());
+        temp->rightchild = new Node(right.getValue());
+        val = BinCompute(left.getValue(), right.getValue(), '+');
+        root = temp;
+    }
+    
+    //*******Operator+Operator****//
+    Add(Operator left, Operator right)
+    {
+        Node *temp = new Node('+');
+        temp->leftchild = left.root;
+        temp->rightchild = right.root;
+        val = BinCompute(left.val, right.val, '+');
+        root = temp;
+    }
+};
+//**********Multiply**************//
+//******Const*Const***********//
+//*****Const*Operator *******//
+//*****Operator*Const*********//
+//*****Variable*Const*********//
+//*****Const*Variable*********//
+//*******Variable*Operator****//
+//*******Operator*Variable****//
+//*******Variable*Variable****//
+//*******Operator*Operator****//
+class Multiply :public Operator{
+public:
+    //******Const*Const***********//
+   Multiply(Const left,Const right)
+    {
+        ostringstream s1,s2;
+        string sl,sr;
+        root = new Node('*');
+        root->leftchild =new Node(left.getValue());
+        root->rightchild =new Node(right.getValue());
+        s1<<left.getValue();
+        sl=s1.str();
+        s2<<right.getValue();
+        sr=s2.str();
+        val=BinCompute(sl, sr, '*');
+        }
+    //*****Const*Operator *******//
+    Multiply(Const left,Operator right)
+    {
+        Node *temp=new Node('*');
+        temp->leftchild = new Node(left.getValue());
+        temp->rightchild = right.root;
+        ostringstream s1;
+        string sl;
+        s1 << left.getValue();
+        sl = s1.str();
+        val = BinCompute(sl, right.val, '*');
+        root = temp;
+
+    }
+    //*****Operator*Const*********//
+    Multiply(Operator left, Const right)
+    {
+        Node *temp = new Node('*');
+        temp->leftchild = left.root;
+        temp->rightchild = new Node(right.getValue());
+        ostringstream s1;
+        string sr;
+        s1 << right.getValue();
+        sr = s1.str();
+        val = BinCompute(left.val, sr, '*');
+        root = temp;
+    }
+    //*****Variable*Const*********//
+    Multiply(Var left, Const right)
+    {
+        root = new Node('*');
+        root->leftchild = new Node(left.getValue());
+        root->rightchild = new Node(right.getValue());
+        ostringstream s1;
+        string sr;
+        s1 << right.getValue();
+        sr = s1.str();
+        val = BinCompute(left.getValue(), sr, '*');
+    }
+   //*****Const*Variable*********//
+    Multiply(Const left, Var right)
+    {
+        root = new Node('*');
+        root->leftchild = new Node(left.getValue());
+        root->rightchild = new Node(right.getValue());
+        ostringstream s1;
+        string sl;
+        s1 << left.getValue();
+        sl = s1.str();
+        val = BinCompute(sl, right.getValue(), '*');
+    }
+    
+    //*******Variable*Operator****//
+    Multiply(Var left, Operator right)
+    {
+        Node *temp = new Node('*');
+        temp->leftchild = new Node(left.getValue());
+        temp->rightchild = right.root;
+        val = BinCompute(left.getValue(), right.val, '*');
+        root = temp;
+    }
+    
+    //*******Operator*Variable****//
+    Multiply(Operator left, Var right)
+    {
+        Node *temp = new Node('*');
+        temp->leftchild = left.root;
+        temp->rightchild = new Node(right.getValue());
+        val = BinCompute(left.val, right.getValue(), '*');
+        root = temp;
+    }
+    
+    //*******Variable*Variable****//
+    Multiply(Var left, Var right)
+    {
+        Node *temp = new Node('*');
+        temp->leftchild = new Node(left.getValue());
+        temp->rightchild = new Node(right.getValue());
+        val = BinCompute(left.getValue(), right.getValue(), '*');
+        root = temp;
+    }
+    
+    //*******Operator*Operator****//
+    Multiply(Operator left, Operator right)
+    {
+        Node *temp = new Node('*');
+        temp->leftchild = left.root;
+        temp->rightchild = right.root;
+        val = BinCompute(left.val, right.val, '*');
+        root = temp;
+    }
+};
+    //**********Division**************//
+    //******Const/Const***********//
+    //*****Const/Operator *******//
+    //*****Operator/Const*********//
+    //*****Variable/Const*********//
+    //*****Const/Variable*********//
+    //*******Variable/Operator****//
+    //*******Operator/Variable****//
+    //*******Variable/Variable****//
+    //*******Operator/Operator****//
+    class Division :public Operator{
+    public:
+        //******Const/Const***********//
+        Division(Const left,Const right)
+        {
+            ostringstream s1,s2;
+            string sl,sr;
+            root = new Node('/');
+            root->leftchild =new Node(left.getValue());
+            root->rightchild =new Node(right.getValue());
+            s1<<left.getValue();
+            sl=s1.str();
+            s2<<right.getValue();
+            sr=s2.str();
+            if (root->rightchild==0) {
+                throw "DivByZero";
+            }
+            val=BinCompute(sl, sr, '/');
+        }
+        //*****Const/Operator *******//
+        Division(Const left,Operator right)
+        {
+            Node *temp=new Node('/');
+            temp->leftchild = new Node(left.getValue());
+            temp->rightchild = right.root;
+            ostringstream s1;
+            string sl;
+            s1 << left.getValue();
+            sl = s1.str();
+            if (root->rightchild==0) {
+                throw "DivByZero";
+            }
+            val = BinCompute(sl, right.val, '/');
+            root = temp;
+            
+        }
+        //*****Operator/Const*********//
+        Division(Operator left, Const right)
+        {
+            Node *temp = new Node('/');
+            temp->leftchild = left.root;
+            temp->rightchild = new Node(right.getValue());
+            ostringstream s1;
+            string sr;
+            s1 << right.getValue();
+            sr = s1.str();
+            if (root->rightchild==0) {
+                throw "DivByZero";
+            }
+            val = BinCompute(left.val, sr, '/');
+            root = temp;
+        }
+        //*****Variable/Const*********//
+        Division(Var left, Const right)
+        {
+            root = new Node('/');
+            root->leftchild = new Node(left.getValue());
+            root->rightchild = new Node(right.getValue());
+            ostringstream s1;
+            string sr;
+            s1 << right.getValue();
+            sr = s1.str();
+            if (root->rightchild==0) {
+                throw "DivByZero";
+            }
+            val = BinCompute(left.getValue(), sr, '/');
+        }
+        //*****Const/Variable*********//
+        Division(Const left, Var right)
+        {
+            root = new Node('/');
+            root->leftchild = new Node(left.getValue());
+            root->rightchild = new Node(right.getValue());
+            ostringstream s1;
+            string sl;
+            s1 << left.getValue();
+            sl = s1.str();
+            if (root->rightchild==0) {
+                throw "DivByZero";
+            }
+            val = BinCompute(sl, right.getValue(), '/');
+        }
+        
+        //*******Variable/Operator****//
+        Division(Var left, Operator right)
+        {
+            Node *temp = new Node('/');
+            temp->leftchild = new Node(left.getValue());
+            temp->rightchild = right.root;
+            if (root->rightchild==0) {
+                throw "DivByZero";
+            }
+            val = BinCompute(left.getValue(), right.val, '/');
+            root = temp;
+        }
+        
+        //*******Operator/Variable****//
+        Division(Operator left, Var right)
+        {
+            Node *temp = new Node('/');
+            temp->leftchild = left.root;
+            temp->rightchild = new Node(right.getValue());
+            if (root->rightchild==0) {
+                throw "DivByZero";
+            }
+            val = BinCompute(left.val, right.getValue(), '/');
+            root = temp;
+        }
+        
+        //*******Variable/Variable****//
+        Division(Var left, Var right)
+        {
+            Node *temp = new Node('/');
+            temp->leftchild = new Node(left.getValue());
+            temp->rightchild = new Node(right.getValue());
+            if (root->rightchild==0) {
+                throw "DivByZero";
+            }
+            val = BinCompute(left.getValue(), right.getValue(), '/');
+            root = temp;
+        }
+        
+        //*******Operator/Operator****//
+        Division(Operator left, Operator right)
+        {
+            Node *temp = new Node('/');
+            temp->leftchild = left.root;
+            temp->rightchild = right.root;
+            if (root->rightchild==0) {
+                throw "DivByZero";
+            }
+            val = BinCompute(left.val, right.val, '/');
+            root = temp;
+        }
+
+
+    };
+/*void preOrder(Node *p)
+	{
+ if (p)
+ {
+ cout << p->oper;
+ preOrder(p->leftchild);
+ preOrder(p->rightchild);
+ }
+	}
+ 
+	friend ostream& operator << (ostream &s, Operator oper)
+	{
+ s << oper.val;
+ return s;
+	}
+ };*/
+
+int main()
+{
+    
+    Operator e=Add(Const(5),Const(3));
+    Operator e1 = Add(Const(5), e);
+    Operator e2 = Add(Var("x"), Const(5));
+    Operator e3 = Add(Const(5),Var("x"));
+    Var v("x");
+    v.set("x", 5);
+    Operator e4 = Add(Const(5), v);
+    Operator e5 = Add(v, e4);
+    Operator e6 = Add(e4, v);
+    Operator e7 = Add(v, v);
+    Operator e8 = Add(e5, e6);
+    
+    cout << e << endl;
+    cout << e1 << endl;
+    cout << e2 << endl;
+    cout << e3 << endl;
+    cout << e4 << endl;
+    cout << e5 << endl;
+    cout << e6 << endl;
+    cout << e7 << endl;
+    cout << e8 << endl;
+    
+
+        Operator a=Multiply(Const(5),Const(3));
+        Operator a1 = Multiply(Const(5), a);
+        Operator a2 = Multiply(Var("x"), Const(5));
+        Operator a3 = Multiply(Const(5),Var("x"));
+    
+        v.set("x", 5);
+        Operator a4 = Multiply(Const(5), v);
+        Operator a5 = Multiply(v, a4);
+        Operator a6 = Multiply(a4, v);
+        Operator a7 = Multiply(v, v);
+        Operator a8 = Multiply(a5, a6);
+        
+        cout << a << endl;
+        cout << a1 << endl;
+        cout << a2 << endl;
+        cout << a3 << endl;
+        cout << a4 << endl;
+        cout << a5 << endl;
+        cout << a6 << endl;
+        cout << a7 << endl;
+        cout << a8 << endl;
+    
+        Operator b=Division(Const(5),Const(3));
+        Operator b1 = Division(Const(5), b);
+        Operator b2 = Division(Var("x"), Const(5));
+        Operator b3 = Division(Const(5),Var("x"));
+        
+        v.set("x", 5);
+        Operator b4 = Division(Const(5), v);
+        Operator b5 = Division(v, b4);
+        Operator b6 = Division(b4, v);
+        Operator b7 = Division(v, v);
+        Operator b8 = Division(b5, b6);
+        
+        cout << b << endl;
+        cout << b1 << endl;
+        cout << b2 << endl;
+        cout << b3 << endl;
+        cout << b4 << endl;
+        cout << b5 << endl;
+        cout << b6 << endl;
+        cout << b7 << endl;
+        cout << b8 << endl;
+        return 0;
+}
