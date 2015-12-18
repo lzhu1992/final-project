@@ -9,7 +9,8 @@ So far we have acheived the following functions:
     Mutiplication eg. 5x*(5+x)=25x+5x^2;
     Division eg.  (5-10x)/(25+10x+x^2);
 2.  Solve variable equations:
-    eg. when x=1 the result of Polynomial 5-10x is -5;
+    eg. Solve x+2=0, get x=-2;
+        when x=1 the result of Polynomial 5-10x is -5;
         the x of 5-10x=y can be solved as: x=(y-5)/(-10);
         Solve(25+10x+x^2=0), x=-5;
 3.  Solve sin and cos.
