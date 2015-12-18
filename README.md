@@ -3,7 +3,7 @@
 We combined our file into a header file and cpp file(main).
 
 So far we have acheived the following functions:
-1.  Build multivariable equations that include addition, subtraction, multiplication and division operations. And compute the polynominal to the simpest one.
+1.  Build multivariable equations that include addition, subtraction, multiplication and division operations. And compute the polynomial to the simpest one.
     Addition eg. (10x-5)+(6x+5)=16x;
     Subtraction eg. -(-5+10x)=5-10x;
     Mutiplication eg. 5x*(5+x)=25x+5x^2;
@@ -13,5 +13,5 @@ So far we have acheived the following functions:
         the x of 5-10x=y can be solved as: x=(y-5)/(-10);
         Solve(25+10x+x^2=0), x=-5;
 3.  Solve sin and cos.
-4.  Solve differential and integral equation.
+4.  Solve polynomial differential and integral equation.
         
