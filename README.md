@@ -1,6 +1,6 @@
 # final-project
 
-We combined our file into a header file and cpp file(main).
+We combined our file into a header file and cpp file(main). Please check the file named algebra.cpp
 
 So far we have acheived the following functions:
 1.  Build multivariable equations that include addition, subtraction, multiplication and division operations. And compute the polynomial to the simpest one.
