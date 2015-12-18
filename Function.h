@@ -1,5 +1,3 @@
-//  Created by LIN ZHU on 11/26/2015.
-//  Copyright © 2015 Lin Zhu. All rights reserved.
 
 #pragma once
 #include <iostream>
