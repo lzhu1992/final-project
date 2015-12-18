@@ -1,12 +1,3 @@
-//
-//
-//  Algebra.cpp
-//  Ploynamial add,minus,multi, divided, and some Math Function.
-//
-//  Created by LIN ZHU on 11/26/2015.
-//  Copyright © 2015 Lin Zhu. All rights reserved.
-//
-
 #include "Function.h"
 
 //*************Variable Coeffiencal*******//
