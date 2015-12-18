@@ -3,7 +3,7 @@
 We combined our file into a header file and cpp file(main).
 
 So far we have acheived the following functions:
-1.  Build multivariable equations that include addition, subtraction, multiplication and division operations.
+1.  Build multivariable equations that include addition, subtraction, multiplication and division operations. And compute the polynominal to the simpest one.
     Addition eg. (10x-5)+(6x+5)=16x;
     Subtraction eg. -(-5+10x)=5-10x;
     Mutiplication eg. 5x*(5+x)=25x+5x^2;
