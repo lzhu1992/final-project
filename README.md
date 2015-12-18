@@ -11,7 +11,7 @@ So far we have acheived the following functions:
 2.  Solve variable equations:
     eg. when x=1 the result of Polynomial 5-10x is -5;
         the x of 5-10x=y can be solved as: x=(y-5)/(-10);
-        Solve(25+10x+x^2), x=-5;
+        Solve(25+10x+x^2=0), x=-5;
 3.  Solve sin and cos.
 4.  Solve differential and integral equation.
         
