@@ -1,8 +1,16 @@
 # final-project
 
-The file can be downloaded and excuted separately by using eclipse or codeblock. 
-Each single program file will be linked by binary tree.
+We combined our file into a header file and cpp file(main).
 
 So far we have acheived the following functions:
-1. Build multivariable equations that include addition, subtraction, multiplication and division operations.
-2. Solve roots of quadratic equations, multivariable equations, integration, first order and second order differential equations.
+1.  Build multivariable equations that include addition, subtraction, multiplication and division operations.
+    Addition eg. (10x-5)+(6x+5)=16x
+    Subtraction eg. -(-5+10x)=5-10x
+    Mutiplication eg. 5x*(5+x)=25x+5x^2
+    Division eg.  (5-10x)/(25+10x+x^2)
+2.  Solve variable equations:
+    eg. when x=1 the result of Polynomial 5-10x is -5.
+        the x of 5-10x=y can be solved as: x=(y-5)/(-10)
+3.  Solve sin and cos.
+4.  Solve differential and integral equation.
+        
